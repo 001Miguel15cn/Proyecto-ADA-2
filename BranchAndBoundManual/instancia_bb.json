@@ -1,0 +1,18 @@
+{
+  "tipos_ayuda": [
+    {"id": "A", "divisible": false, "volumen": 3, "importancia": 1},
+    {"id": "B", "divisible": false, "volumen": 2, "importancia": 1}
+  ],
+  "prioridades": {"Alta": 3, "Media": 2},
+  "centros": [
+    {"id": "C1", "activo": true, "cap_despacho": 17, "inventario": {"A": 7, "B": 5}}
+  ],
+  "zonas": [
+    {"id": "Z1", "poblacion": 500, "prioridad": "Alta", "demanda": {"A": 4, "B": 3}},
+    {"id": "Z2", "poblacion": 300, "prioridad": "Media", "demanda": {"A": 3, "B": 2}}
+  ],
+  "rutas": [
+    {"origen": "C1", "destino": "Z1", "disponible": true, "costo": 0, "capacidad": 20},
+    {"origen": "C1", "destino": "Z2", "disponible": true, "costo": 0, "capacidad": 20}
+  ]
+}
