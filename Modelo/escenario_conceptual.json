@@ -1,0 +1,36 @@
+{
+  "tipos_ayuda": [
+    {"id": "Mercado", "divisible": false, "volumen": 5, "importancia": 1.0},
+    {"id": "Agua", "divisible": true, "volumen": 1, "importancia": 1.5},
+    {"id": "Aseo", "divisible": false, "volumen": 2, "importancia": 1.0},
+    {"id": "Primera_infancia", "divisible": false, "volumen": 3, "importancia": 1.2}
+  ],
+  "prioridades": {"Critica": 4, "Alta": 3, "Media": 2, "Baja": 1},
+  "centros": [
+    {"id": "C1", "activo": true, "cap_despacho": 400, "inventario": {"Mercado": 40, "Agua": 200, "Aseo": 60, "Primera_infancia": 20}, "reserva": {"Agua": 20}},
+    {"id": "C2", "activo": true, "cap_despacho": 300, "inventario": {"Mercado": 30, "Agua": 150, "Aseo": 40, "Primera_infancia": 25}},
+    {"id": "C3", "activo": true, "cap_despacho": 250, "inventario": {"Mercado": 20, "Agua": 100, "Aseo": 30, "Primera_infancia": 10}}
+  ],
+  "zonas": [
+    {"id": "Z1", "poblacion": 1200, "prioridad": "Critica", "demanda": {"Mercado": 30, "Agua": 150, "Aseo": 25, "Primera_infancia": 20}, "cobertura_minima": 0.3},
+    {"id": "Z2", "poblacion": 800, "prioridad": "Alta", "demanda": {"Mercado": 25, "Agua": 120, "Aseo": 20, "Primera_infancia": 15}},
+    {"id": "Z3", "poblacion": 600, "prioridad": "Media", "demanda": {"Mercado": 20, "Agua": 90, "Aseo": 20, "Primera_infancia": 10}},
+    {"id": "Z4", "poblacion": 400, "prioridad": "Media", "demanda": {"Mercado": 15, "Agua": 70, "Aseo": 15, "Primera_infancia": 8}},
+    {"id": "Z5", "poblacion": 300, "prioridad": "Baja", "demanda": {"Mercado": 10, "Agua": 50, "Aseo": 10, "Primera_infancia": 5}}
+  ],
+  "rutas": [
+    {"origen":"C1","destino":"Z1","disponible":true,"costo":2,"capacidad":200},
+    {"origen":"C1","destino":"Z2","disponible":true,"costo":3,"capacidad":150},
+    {"origen":"C1","destino":"Z3","disponible":false,"costo":4,"capacidad":150},
+    {"origen":"C1","destino":"Z4","disponible":true,"costo":5,"capacidad":100},
+    {"origen":"C2","destino":"Z1","disponible":true,"costo":4,"capacidad":120},
+    {"origen":"C2","destino":"Z2","disponible":true,"costo":2,"capacidad":150},
+    {"origen":"C2","destino":"Z3","disponible":true,"costo":3,"capacidad":120},
+    {"origen":"C2","destino":"Z5","disponible":true,"costo":6,"capacidad":80},
+    {"origen":"C3","destino":"Z3","disponible":true,"costo":2,"capacidad":120},
+    {"origen":"C3","destino":"Z4","disponible":true,"costo":2,"capacidad":100},
+    {"origen":"C3","destino":"Z5","disponible":true,"costo":3,"capacidad":80},
+    {"origen":"C3","destino":"Z1","disponible":true,"costo":7,"capacidad":60}
+  ],
+  "incompatibilidades": [{"centro": "C3", "ayuda": "Primera_infancia"}]
+}
