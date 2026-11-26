@@ -1,0 +1,6 @@
+seccion,id,datos
+tipos_ayuda,Agua,"{""id"":""Agua"",""divisible"":true,""volumen"":1,""importancia"":1}"
+prioridades,,"{""Critica"":4,""Alta"":3,""Media"":2,""Baja"":1}"
+centros,C1,"{""id"":""C1"",""activo"":true,""cap_despacho"":100,""inventario"":{""Agua"":50},""reserva"":{}}"
+zonas,Z1,"{""id"":""Z1"",""poblacion"":100,""prioridad"":""Alta"",""demanda"":{""Agua"":40},""cobertura_minima"":0}"
+rutas,C1->Z1,"{""origen"":""C1"",""destino"":""Z1"",""disponible"":true,""costo"":2,""capacidad"":50}"
