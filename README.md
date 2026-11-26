@@ -36,6 +36,11 @@ API/repositories      Lectura y escritura de archivos JSON
 - `API/dto/`: contratos Pydantic de las peticiones y respuestas de escenario.
 - `API/services/`: operaciones de escenarios y conexión con la validación y el
   optimizador.
+- `API/services/escenario_service_interface.py`: contrato que consumen los
+  controllers.
+- `API/services/escenario_service.py`: implementación concreta
+  `EscenarioServiceImpl`.
+- `API/dependencies.py`: selecciona e inyecta la implementación en FastAPI.
 - `API/repositories/`: persistencia local, un archivo JSON por escenario.
 - `API/domain/`: estructura y reglas de validación del dominio.
 - `API/services/importacion_service.py`: carga y validación de escenarios JSON/CSV.
@@ -49,6 +54,11 @@ Los DTOs forman el contrato público y validan la forma y los tipos del JSON;
 `domain` conserva las reglas propias del problema y las relaciones entre
 centros, ayudas, zonas y rutas. El servicio coordina las operaciones y el
 repositorio es el único que conoce dónde se guardan los archivos.
+
+El controller depende de `EscenarioServiceInterface`; `API/dependencies.py`
+inyecta `EscenarioServiceImpl` como implementación actual. Si luego se crea
+otra implementación (por ejemplo, una de pruebas o una que use base de datos),
+se puede cambiar desde ese proveedor sin reescribir las rutas.
 
 No usamos una carpeta genérica `utils`: el importador es una operación de
 aplicación en `services`, mientras que la plantilla es un recurso estático en
@@ -83,6 +93,7 @@ los formatos de petición y respuesta. El servidor guarda los escenarios en
 | `POST` | `/api/escenarios` | Crea un borrador con `{"id":"emergencia-1","nombre":"Emergencia"}` |
 | `GET` | `/api/escenarios/{id}` | Consulta el escenario |
 | `PUT` | `/api/escenarios/{id}` | Reemplaza todo el contenido `datos` |
+| `POST` | `/api/escenarios/{id}/importar` | Sube un escenario `.json` o `.csv` como `multipart/form-data` |
 | `DELETE` | `/api/escenarios/{id}` | Elimina el archivo JSON del escenario |
 | `GET` | `/api/escenarios/{id}/secciones/{seccion}` | Lista ayudas, centros, zonas o rutas |
 | `POST` | `/api/escenarios/{id}/secciones/{seccion}` | Registra un centro, zona, tipo o ruta |
@@ -149,3 +160,13 @@ fila CSV lleva un objeto JSON en `datos`. `API/resources/templates/plantilla_esc
 muestra el formato: `seccion,id,datos`. Las secciones listadas admiten varias filas;
 `prioridades` y `opciones` se suministran una vez cada una. La importación no
 ejecuta el optimizador: solo transforma y valida los datos.
+
+Para probar la subida en Swagger, crea o elige un escenario, abre
+`POST /api/escenarios/{id}/importar`, selecciona el archivo y ejecuta la ruta.
+La importación reemplaza los datos del escenario indicado y acepta archivos de
+hasta 5 MB. Desde PowerShell también se puede usar:
+
+```powershell
+curl.exe -X POST "http://127.0.0.1:8000/api/escenarios/demo/importar" `
+  -F "archivo=@API/resources/templates/plantilla_escenario.csv"
+```

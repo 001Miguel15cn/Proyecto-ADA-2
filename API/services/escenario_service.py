@@ -7,12 +7,14 @@ from typing import Any
 
 from API.domain.escenarios import GestorEscenarios, crear_escenario_vacio, validar_escenario
 from API.repositories import EscenarioRepository
+from API.services.escenario_service_interface import EscenarioServiceInterface
+from API.services.importacion_service import cargar_escenario_contenido
 
 
 SECCIONES = {"tipos_ayuda", "centros", "zonas", "rutas"}
 
 
-class EscenarioService:
+class EscenarioServiceImpl(EscenarioServiceInterface):
     def __init__(self, repositorio: EscenarioRepository | None = None):
         self.repositorio = repositorio or EscenarioRepository()
 
@@ -31,6 +33,12 @@ class EscenarioService:
         documento = self.obtener(escenario_id)
         documento["datos"] = copy.deepcopy(datos)
         return self.repositorio.guardar(documento)
+
+    def importar_archivo(
+        self, escenario_id: str, nombre_archivo: str, contenido: bytes
+    ) -> dict[str, Any]:
+        datos = cargar_escenario_contenido(nombre_archivo, contenido)
+        return self.reemplazar_datos(escenario_id, datos)
 
     def agregar(self, escenario_id: str, seccion: str, registro: dict[str, Any]) -> dict[str, Any]:
         self._validar_seccion(seccion)
