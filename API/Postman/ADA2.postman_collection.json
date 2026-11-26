@@ -292,6 +292,41 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "importar csv",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "type": "file",
+              "key": "archivo",
+              "src": "/C:/Users/juand/Desktop/PROYECTO ADA 2/Proyecto-ADA-2/API/resources/templates/plantilla_escenario.csv"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios/demo2/importar",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios",
+            "demo2",
+            "importar"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 
 from API.dto import (
     EscenarioCreateDTO,
@@ -19,6 +19,7 @@ from API.services import EscenarioServiceInterface
 
 
 router = APIRouter(prefix="/api/escenarios", tags=["Escenarios"])
+TAMANO_MAXIMO_ARCHIVO = 5 * 1024 * 1024
 
 
 def _llamar(funcion, *args, **kwargs):
@@ -61,6 +62,30 @@ def reemplazar_escenario(
 ) -> EscenarioDTO:
     datos = body.model_dump(mode="json")
     return _llamar(servicio.reemplazar_datos, escenario_id, datos)
+
+
+@router.post("/{escenario_id}/importar", response_model=EscenarioDTO)
+async def importar_archivo(
+    escenario_id: str,
+    archivo: UploadFile = File(..., description="Archivo de escenario .json o .csv"),
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+) -> EscenarioDTO:
+    nombre = archivo.filename or ""
+    try:
+        if not nombre.lower().endswith((".json", ".csv")):
+            raise HTTPException(status_code=415, detail="Solo se admiten archivos .json y .csv.")
+        contenido = await archivo.read(TAMANO_MAXIMO_ARCHIVO + 1)
+        if len(contenido) > TAMANO_MAXIMO_ARCHIVO:
+            raise HTTPException(status_code=413, detail="El archivo supera el límite de 5 MB.")
+        return servicio.importar_archivo(escenario_id, nombre, contenido)
+    except HTTPException:
+        raise
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc).strip("'")) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    finally:
+        await archivo.close()
 
 
 @router.delete("/{escenario_id}", status_code=status.HTTP_204_NO_CONTENT)

@@ -22,6 +22,11 @@ class EscenarioServiceInterface(ABC):
     def reemplazar_datos(self, escenario_id: str, datos: dict[str, Any]) -> dict[str, Any]: ...
 
     @abstractmethod
+    def importar_archivo(
+        self, escenario_id: str, nombre_archivo: str, contenido: bytes
+    ) -> dict[str, Any]: ...
+
+    @abstractmethod
     def agregar(self, escenario_id: str, seccion: str, registro: dict[str, Any]) -> dict[str, Any]: ...
 
     @abstractmethod

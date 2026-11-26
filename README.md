@@ -93,6 +93,7 @@ los formatos de petición y respuesta. El servidor guarda los escenarios en
 | `POST` | `/api/escenarios` | Crea un borrador con `{"id":"emergencia-1","nombre":"Emergencia"}` |
 | `GET` | `/api/escenarios/{id}` | Consulta el escenario |
 | `PUT` | `/api/escenarios/{id}` | Reemplaza todo el contenido `datos` |
+| `POST` | `/api/escenarios/{id}/importar` | Sube un escenario `.json` o `.csv` como `multipart/form-data` |
 | `DELETE` | `/api/escenarios/{id}` | Elimina el archivo JSON del escenario |
 | `GET` | `/api/escenarios/{id}/secciones/{seccion}` | Lista ayudas, centros, zonas o rutas |
 | `POST` | `/api/escenarios/{id}/secciones/{seccion}` | Registra un centro, zona, tipo o ruta |
@@ -159,3 +160,13 @@ fila CSV lleva un objeto JSON en `datos`. `API/resources/templates/plantilla_esc
 muestra el formato: `seccion,id,datos`. Las secciones listadas admiten varias filas;
 `prioridades` y `opciones` se suministran una vez cada una. La importación no
 ejecuta el optimizador: solo transforma y valida los datos.
+
+Para probar la subida en Swagger, crea o elige un escenario, abre
+`POST /api/escenarios/{id}/importar`, selecciona el archivo y ejecuta la ruta.
+La importación reemplaza los datos del escenario indicado y acepta archivos de
+hasta 5 MB. Desde PowerShell también se puede usar:
+
+```powershell
+curl.exe -X POST "http://127.0.0.1:8000/api/escenarios/demo/importar" `
+  -F "archivo=@API/resources/templates/plantilla_escenario.csv"
+```
