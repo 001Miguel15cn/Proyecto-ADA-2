@@ -1,0 +1,297 @@
+{
+  "info": {
+    "_postman_id": "e65412e6-5d01-4923-84bb-af5b228526a0",
+    "name": "ADA2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "60325399",
+    "_collection_link": "https://go.postman.co/collection/60325399-e65412e6-5d01-4923-84bb-af5b228526a0?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Crear un escenario vacío",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"id\":\"demo\",\"nombre\":\"Escenario de prueba\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Registrar un tipo de ayuda",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"id\":\"Agua\",\"divisible\":true,\"volumen\":1,\"importancia\":1.5}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios/demo/secciones/tipos_ayuda",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios",
+            "demo",
+            "secciones",
+            "tipos_ayuda"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Registrar un centro",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"id\":\"C1\",\"activo\":true,\"cap_despacho\":100,\"inventario\":{\"Agua\":50},\"reserva\":{\"Agua\":5}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios/demo/secciones/centros",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios",
+            "demo",
+            "secciones",
+            "centros"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Registrar una zona",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"id\":\"Z1\",\"poblacion\":100,\"prioridad\":\"Alta\",\"demanda\":{\"Agua\":40},\"cobertura_minima\":0}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios/demo/secciones/zonas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios",
+            "demo",
+            "secciones",
+            "zonas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Registrar una ruta entre el centro y la zona",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"origen\":\"C1\",\"destino\":\"Z1\",\"disponible\":true,\"costo\":2,\"capacidad\":50}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios/demo/secciones/rutas",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios",
+            "demo",
+            "secciones",
+            "rutas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Definir pesos de prioridad",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"Critica\":4,\"Alta\":3,\"Media\":2,\"Baja\":1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios/demo/prioridades",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios",
+            "demo",
+            "prioridades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validar el escenario",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios/demo/validar",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios",
+            "demo",
+            "validar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ejecutar la optimización",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/escenarios/demo/optimizar",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "escenarios",
+            "demo",
+            "optimizar"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
