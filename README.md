@@ -36,6 +36,11 @@ API/repositories      Lectura y escritura de archivos JSON
 - `API/dto/`: contratos Pydantic de las peticiones y respuestas de escenario.
 - `API/services/`: operaciones de escenarios y conexión con la validación y el
   optimizador.
+- `API/services/escenario_service_interface.py`: contrato que consumen los
+  controllers.
+- `API/services/escenario_service.py`: implementación concreta
+  `EscenarioServiceImpl`.
+- `API/dependencies.py`: selecciona e inyecta la implementación en FastAPI.
 - `API/repositories/`: persistencia local, un archivo JSON por escenario.
 - `API/domain/`: estructura y reglas de validación del dominio.
 - `API/services/importacion_service.py`: carga y validación de escenarios JSON/CSV.
@@ -49,6 +54,11 @@ Los DTOs forman el contrato público y validan la forma y los tipos del JSON;
 `domain` conserva las reglas propias del problema y las relaciones entre
 centros, ayudas, zonas y rutas. El servicio coordina las operaciones y el
 repositorio es el único que conoce dónde se guardan los archivos.
+
+El controller depende de `EscenarioServiceInterface`; `API/dependencies.py`
+inyecta `EscenarioServiceImpl` como implementación actual. Si luego se crea
+otra implementación (por ejemplo, una de pruebas o una que use base de datos),
+se puede cambiar desde ese proveedor sin reescribir las rutas.
 
 No usamos una carpeta genérica `utils`: el importador es una operación de
 aplicación en `services`, mientras que la plantilla es un recurso estático en

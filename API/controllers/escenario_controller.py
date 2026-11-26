@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from API.dto import (
     EscenarioCreateDTO,
@@ -14,11 +14,11 @@ from API.dto import (
     PrioridadesDTO,
     ValidacionDTO,
 )
-from API.services import EscenarioService
+from API.dependencies import obtener_servicio_escenario
+from API.services import EscenarioServiceInterface
 
 
 router = APIRouter(prefix="/api/escenarios", tags=["Escenarios"])
-service = EscenarioService()
 
 
 def _llamar(funcion, *args, **kwargs):
@@ -33,61 +33,104 @@ def _llamar(funcion, *args, **kwargs):
 
 
 @router.get("", response_model=list[EscenarioResumenDTO])
-def listar_escenarios():
-    return service.listar()
+def listar_escenarios(servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario)):
+    return servicio.listar()
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-def crear_escenario(body: EscenarioCreateDTO) -> EscenarioDTO:
-    return _llamar(service.crear, body.id, body.nombre)
+def crear_escenario(
+    body: EscenarioCreateDTO,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+) -> EscenarioDTO:
+    return _llamar(servicio.crear, body.id, body.nombre)
 
 
 @router.get("/{escenario_id}", response_model=EscenarioDTO)
-def obtener_escenario(escenario_id: str) -> EscenarioDTO:
-    return _llamar(service.obtener, escenario_id)
+def obtener_escenario(
+    escenario_id: str,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+) -> EscenarioDTO:
+    return _llamar(servicio.obtener, escenario_id)
 
 
 @router.put("/{escenario_id}", response_model=EscenarioDTO)
-def reemplazar_escenario(escenario_id: str, body: EscenarioDatosDTO) -> EscenarioDTO:
+def reemplazar_escenario(
+    escenario_id: str,
+    body: EscenarioDatosDTO,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+) -> EscenarioDTO:
     datos = body.model_dump(mode="json")
-    return _llamar(service.reemplazar_datos, escenario_id, datos)
+    return _llamar(servicio.reemplazar_datos, escenario_id, datos)
 
 
 @router.delete("/{escenario_id}", status_code=status.HTTP_204_NO_CONTENT)
-def eliminar_escenario(escenario_id: str):
-    _llamar(service.eliminar_escenario, escenario_id)
+def eliminar_escenario(
+    escenario_id: str,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+):
+    _llamar(servicio.eliminar_escenario, escenario_id)
 
 
 @router.get("/{escenario_id}/secciones/{seccion}")
-def obtener_seccion(escenario_id: str, seccion: str):
-    return _llamar(service.obtener_seccion, escenario_id, seccion)
+def obtener_seccion(
+    escenario_id: str,
+    seccion: str,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+):
+    return _llamar(servicio.obtener_seccion, escenario_id, seccion)
 
 
 @router.post("/{escenario_id}/secciones/{seccion}")
-def agregar_registro(escenario_id: str, seccion: str, body: dict[str, Any]):
-    return _llamar(service.agregar, escenario_id, seccion, body)
+def agregar_registro(
+    escenario_id: str,
+    seccion: str,
+    body: dict[str, Any],
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+):
+    return _llamar(servicio.agregar, escenario_id, seccion, body)
 
 
 @router.put("/{escenario_id}/secciones/{seccion}/{ident}")
-def actualizar_registro(escenario_id: str, seccion: str, ident: str, body: dict[str, Any]):
-    return _llamar(service.actualizar, escenario_id, seccion, ident, body)
+def actualizar_registro(
+    escenario_id: str,
+    seccion: str,
+    ident: str,
+    body: dict[str, Any],
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+):
+    return _llamar(servicio.actualizar, escenario_id, seccion, ident, body)
 
 
 @router.delete("/{escenario_id}/secciones/{seccion}/{ident}")
-def eliminar_registro(escenario_id: str, seccion: str, ident: str):
-    return _llamar(service.eliminar, escenario_id, seccion, ident)
+def eliminar_registro(
+    escenario_id: str,
+    seccion: str,
+    ident: str,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+):
+    return _llamar(servicio.eliminar, escenario_id, seccion, ident)
 
 
 @router.put("/{escenario_id}/prioridades")
-def definir_prioridades(escenario_id: str, body: PrioridadesDTO) -> EscenarioDTO:
-    return _llamar(service.definir_prioridades, escenario_id, body.root)
+def definir_prioridades(
+    escenario_id: str,
+    body: PrioridadesDTO,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+) -> EscenarioDTO:
+    return _llamar(servicio.definir_prioridades, escenario_id, body.root)
 
 
 @router.post("/{escenario_id}/validar")
-def validar_escenario(escenario_id: str) -> ValidacionDTO:
-    return _llamar(service.validar, escenario_id)
+def validar_escenario(
+    escenario_id: str,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+) -> ValidacionDTO:
+    return _llamar(servicio.validar, escenario_id)
 
 
 @router.post("/{escenario_id}/optimizar")
-def optimizar_escenario(escenario_id: str):
-    return _llamar(service.optimizar, escenario_id)
+def optimizar_escenario(
+    escenario_id: str,
+    servicio: EscenarioServiceInterface = Depends(obtener_servicio_escenario),
+):
+    return _llamar(servicio.optimizar, escenario_id)

@@ -7,12 +7,13 @@ from typing import Any
 
 from API.domain.escenarios import GestorEscenarios, crear_escenario_vacio, validar_escenario
 from API.repositories import EscenarioRepository
+from API.services.escenario_service_interface import EscenarioServiceInterface
 
 
 SECCIONES = {"tipos_ayuda", "centros", "zonas", "rutas"}
 
 
-class EscenarioService:
+class EscenarioServiceImpl(EscenarioServiceInterface):
     def __init__(self, repositorio: EscenarioRepository | None = None):
         self.repositorio = repositorio or EscenarioRepository()
 
