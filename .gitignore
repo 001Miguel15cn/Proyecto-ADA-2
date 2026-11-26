@@ -20,6 +20,7 @@ env/
 # Base de datos local
 *.db
 *.sqlite3
+API/data/escenarios/*.json
 
 # Archivos del sistema
 .DS_Store
